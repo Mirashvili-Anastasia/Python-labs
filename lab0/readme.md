@@ -12,3 +12,8 @@
 ```python
 print("hello")
 ```
+## скриншот результата
+![alt text](image.png)
+## список использованных источников:
+1.[Справка по markdown](https://doka.guide/tools/markdown/)
+2.[Пример отчета](https://github.com/still-coding/report_demo)
