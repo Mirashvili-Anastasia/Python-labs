@@ -116,3 +116,91 @@ print(My_result)
 
 ---
 
+## Задание 4 - favorite_movies.py
+## 1. Описание проделанной работы:
+Есть строка с перечислением фильмов
+```commandline
+my_favorite_movies = 'Терминатор, Пятый элемент, Аватар, Чужие, Назад в будущее'
+```
+Требуется ввести на консоль с помощью индексации строки, последовательно:
+- первый фильм
+- последний
+- второй
+- второй с конца
+## 2. Программа
+```питон
+my_favorite_movies = 'Терминатор, Пятый элемент, Аватар, Чужие, Назад в будущее'
+print(my_favorite_movies[:10], my_favorite_movies[42:63], my_favorite_movies[12:25], my_favorite_movies[35:40])
+```
+## 3. Вывод
+![img_3.png](img_3.png)
+
+---
+
+## Задание 5 - my_family.py
+## 1. Описание проделанной работы:
+Создала
+- списки состоящие из имен моей семьи (минимум 3 элемента)
+- список списков приблизителного роста членов вашей семьи
+
+Вывела на консоль рост отца и общий рост вашей семьи как сумму ростов всех членов
+## 2. Программа
+```питон
+my_family = ['Lyudmila', 'Denis', 'Nastya', 'Sergey']
+
+my_family_height = [
+    ['Lyudmila', 162],
+    ['Denis', 177],
+    ['Nastya', 160],
+    ['Sergey', 177]
+]
+
+print(f'Рост отца - {my_family_height[3][1]} см')
+
+total_height = 0
+for person in my_family_height:
+    total_height = total_height + person[1]
+
+print(f"Общий рост моей семьи - {total_height} см")
+```
+## 3. Вывод
+![img_4.png](img_4.png)
+
+---
+
+## Задание 6 - zoo.py
+## 1. Описание проделанной работы:
+Есть список животных в зоопарке
+```commandline
+zoo = ['lion', 'kangaroo', 'elephant', 'monkey', ]
+```
+нужно:
+- посадить медведя (bear) между львом и кенгуру
+- добавьть птиц из списка birds в последние клетки зоопарка
+- убрать слона
+- вывести на консоль в какой клетке сидит лев (lion) и жаворонок (lark).
+
+## 2. Программа
+```питон
+zoo = ['lion', 'kangaroo', 'elephant', 'monkey', ]
+
+zoo.insert(1, 'bear')
+print(zoo)
+
+birds = ['rooster', 'ostrich', 'lark', ]
+zoo.extend(birds)
+print(zoo)
+
+zoo.remove('elephant')
+print(zoo)
+
+lion_index = zoo.index('lion')
+lark_index = zoo.index('lark')
+
+print(f'Лев в: {lion_index + 1}')
+print(f'Жаворонок в: {lark_index + 1}')
+```
+## 3. Вывод
+![img_5.png](img_5.png)
+
+---
