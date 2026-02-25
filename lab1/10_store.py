@@ -53,3 +53,48 @@ print('Лампа -', lamps_quantity, 'шт, стоимость', lamps_cost, '�
 # Это задание на ручное вычисление - что бы потом понять как работают циклы и насколько с ними проще жить.
 
 # TODO здесь ваш код
+table_code = goods['Стол']
+
+table1_quantity = store[table_code][0]['quantity']
+table1_price = store[table_code][0]['price']
+table1_cost = table1_quantity * table1_price
+
+table2_quantity = store[table_code][1]['quantity']
+table2_price = store[table_code][1]['price']
+table2_cost = table2_quantity * table2_price
+
+table_total_quantity = table1_quantity + table2_quantity
+table_total_cost = table1_cost + table2_cost
+print(f'Стол - {table_total_quantity} шт, стоимость {table_total_cost} руб')
+
+divan_code = goods['Диван']
+
+divan1_quantity = store[divan_code][0]['quantity']
+divan1_price = store[divan_code][0]['price']
+divan1_cost = divan1_quantity * divan1_price
+
+divan2_quantity = store[divan_code][1]['quantity']
+divan2_price = store[divan_code][1]['price']
+divan2_cost = divan2_quantity * divan2_price
+
+divan_total_quantity = divan1_quantity + divan2_quantity
+divan_total_cost = divan1_cost + divan2_cost
+print(f'Диван - {divan_total_quantity} шт, стоимость {divan_total_cost} руб')
+
+stul_code = goods['Стул']
+
+stul1_quantity = store[stul_code][0]['quantity']
+stul1_price = store[stul_code][0]['price']
+stul1_cost = stul1_quantity * stul1_price
+
+stul2_quantity = store[stul_code][1]['quantity']
+stul2_price = store[stul_code][1]['price']
+stul2_cost = stul2_quantity * stul2_price
+
+stul3_quantity = store[stul_code][2]['quantity']
+stul3_price = store[stul_code][2]['price']
+stul3_cost = stul3_quantity * stul3_price
+
+stul_total_quantity = stul1_quantity + stul2_quantity + stul3_quantity
+stul_total_cost = stul1_cost + stul2_cost + stul3_cost
+print(f'Стул - {stul_total_quantity} шт, стоимость {stul_total_cost} руб')
