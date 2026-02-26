@@ -204,3 +204,371 @@ print(f'Жаворонок в: {lark_index + 1}')
 ![img_5.png](img_5.png)
 
 ---
+
+## Задание 7 - songs_list.py
+## 1. Описание проделанной работы:
+Есть список песен группы Depeche Mode со временем звучания с точностью до долей минут
+```commandline
+violator_songs_list = [
+    ['World in My Eyes', 4.86],
+    ['Sweetest Perfection', 4.43],
+    ['Personal Jesus', 4.56],
+    ['Halo', 4.9],
+    ['Waiting for the Night', 6.07],
+    ['Enjoy the Silence', 4.20],
+    ['Policy of Truth', 4.76],
+    ['Blue Dress', 4.29],
+    ['Clean', 5.83],
+]
+```
+Нужно распечатать общее время звучания трех песен: 'Halo', 'Enjoy the Silence' и 'Clean' в формате:
+три песни звучат ХХХ.XX минут
+
+Также сть словарь песен группы Depeche Mode
+```commandline
+violator_songs_dict = {
+    'World in My Eyes': 4.76,
+    'Sweetest Perfection': 4.43,
+    'Personal Jesus': 4.56,
+    'Halo': 4.30,
+    'Waiting for the Night': 6.07,
+    'Enjoy the Silence': 4.6,
+    'Policy of Truth': 4.88,
+    'Blue Dress': 4.18,
+    'Clean': 5.68,
+}
+```
+из этого списка нужно распечатать общее время звучания трех песен: 'Sweetest Perfection', 'Policy of Truth' и 'Blue Dress'
+## 2. Программа
+```питон
+violator_songs_list = [
+    ['World in My Eyes', 4.86],
+    ['Sweetest Perfection', 4.43],
+    ['Personal Jesus', 4.56],
+    ['Halo', 4.9],
+    ['Waiting for the Night', 6.07],
+    ['Enjoy the Silence', 4.20],
+    ['Policy of Truth', 4.76],
+    ['Blue Dress', 4.29],
+    ['Clean', 5.83],
+]
+
+halo_time = violator_songs_list[3][1]
+enjoy_time = violator_songs_list[5][1]
+clean_time = violator_songs_list[8][1]
+
+total_time = halo_time + enjoy_time + clean_time
+
+total_time_rounded = round(total_time, 2)
+
+print(f"Три песни звучат {total_time_rounded} минут")
+
+violator_songs_dict = {
+    'World in My Eyes': 4.76,
+    'Sweetest Perfection': 4.43,
+    'Personal Jesus': 4.56,
+    'Halo': 4.30,
+    'Waiting for the Night': 6.07,
+    'Enjoy the Silence': 4.6,
+    'Policy of Truth': 4.88,
+    'Blue Dress': 4.18,
+    'Clean': 5.68,
+}
+
+Sweetest_Perfection_time = violator_songs_list[1][1]
+Policy_of_Truth_time = violator_songs_list[6][1]
+Blue_Dress_time = violator_songs_list[7][1]
+
+total_time_2 = Sweetest_Perfection_time + Policy_of_Truth_time + Blue_Dress_time
+
+total_time_rounded_2 = round(total_time_2, 2)
+
+print(f"А другие три песни звучат {total_time_rounded_2} минут")
+```
+## 3. Вывод
+![img_6.png](img_6.png)
+
+---
+
+## Задание 8 - secret.py
+## 1. Описание проделанной работы:
+Есть зашифрованное сообщение
+```commandline
+secret_message = [
+    'квевтфпп6щ3стмзалтнмаршгб5длгуча',
+    'дьсеы6лц2бане4т64ь4б3ущея6втщл6б',
+    'т3пплвце1н3и2кд4лы12чф1ап3бкычаь',
+    'ьд5фму3ежородт9г686буиимыкучшсал',
+    'бсц59мегщ2лятьаьгенедыв9фк9ехб1а',
+]
+```
+Нужно его расшифровать и вывести на консоль в удобочитаемом виде.
+
+Ключ к расшифровке:
+- первое слово - 4-я буква
+- второе слово - буквы с 10 по 13, включительно
+- третье слово - буквы с 6 по 15, включительно, через одну
+- четвертое слово - буквы с 8 по 13, включительно, в обратном порядке
+- пятое слово - буквы с 17 по 21, включительно, в обратном порядке
+## 2. Программа
+```питон
+secret_message = [
+    'квевтфпп6щ3стмзалтнмаршгб5длгуча',
+    'дьсеы6лц2бане4т64ь4б3ущея6втщл6б',
+    'т3пплвце1н3и2кд4лы12чф1ап3бкычаь',
+    'ьд5фму3ежородт9г686буиимыкучшсал',
+    'бсц59мегщ2лятьаьгенедыв9фк9ехб1а',
+]
+
+first_word = secret_message[0][3]
+second_word = secret_message[1][9:13]
+third_word = secret_message[2][5:15:2]
+fourth_word = secret_message[3][12:6:-1]
+fifth_word = secret_message[4][20:15]
+
+secret_message = f'{first_word} {second_word} {third_word} {fourth_word} {fifth_word}'
+print(secret_message)
+```
+## 3. Вывод
+![img_7.png](img_7.png)
+
+---
+
+## Задание 9 - garden.py
+## 1. Описание проделанной работы:
+Даны два множества цветов, одни растут в саду, другие на лугу 
+```commandline
+garden = ('ромашка', 'роза', 'одуванчик', 'ромашка', 'гладиолус', 'подсолнух', 'роза', )
+meadow = ('клевер', 'одуванчик', 'ромашка', 'клевер', 'мак', 'одуванчик', 'ромашка', )
+```
+Нужно создать множество цветов, произрастающих в саду и на лугу и вывести на консоль:
+- все виды цветов
+- те, которые растут и там и там
+- те, которые растут в саду, но не растут на лугу
+- те, которые растут на лугу, но не растут в саду
+## 2. Программа
+```питон
+garden = ('ромашка', 'роза', 'одуванчик', 'ромашка', 'гладиолус', 'подсолнух', 'роза', )
+meadow = ('клевер', 'одуванчик', 'ромашка', 'клевер', 'мак', 'одуванчик', 'ромашка', )
+
+garden_set = set(garden)
+meadow_set = set(meadow)
+
+flower_set = set.union(garden_set,meadow_set)
+print(flower_set)
+
+flower_set = garden_set & meadow_set
+print(flower_set)
+
+flower_set = garden_set - meadow_set
+print(flower_set)
+
+flower_set = meadow_set - garden_set
+print(flower_set)
+```
+## 3. Вывод
+![img_8.png](img_8.png)
+
+---
+
+## Задание 10 - shopping.py
+## 1. Описание проделанной работы:
+Есть словарь магазинов с распродажами
+```commandline
+shops = {
+    'ашан':
+        [
+            {'name': 'печенье', 'price': 10.99},
+            {'name': 'конфеты', 'price': 34.99},
+            {'name': 'карамель', 'price': 45.99},
+            {'name': 'пирожное', 'price': 67.99}
+        ],
+    'пятерочка':
+        [
+            {'name': 'печенье', 'price': 9.99},
+            {'name': 'конфеты', 'price': 32.99},
+            {'name': 'карамель', 'price': 46.99},
+            {'name': 'пирожное', 'price': 59.99}
+        ],
+    'магнит':
+        [
+            {'name': 'печенье', 'price': 11.99},
+            {'name': 'конфеты', 'price': 30.99},
+            {'name': 'карамель', 'price': 41.99},
+            {'name': 'пирожное', 'price': 62.99}
+        ],
+}
+```
+Нужно создать словарь цен на продукты
+## 2. Программа
+```питон
+shops = {
+    'ашан':
+        [
+            {'name': 'печенье', 'price': 10.99},
+            {'name': 'конфеты', 'price': 34.99},
+            {'name': 'карамель', 'price': 45.99},
+            {'name': 'пирожное', 'price': 67.99}
+        ],
+    'пятерочка':
+        [
+            {'name': 'печенье', 'price': 9.99},
+            {'name': 'конфеты', 'price': 32.99},
+            {'name': 'карамель', 'price': 46.99},
+            {'name': 'пирожное', 'price': 59.99}
+        ],
+    'магнит':
+        [
+            {'name': 'печенье', 'price': 11.99},
+            {'name': 'конфеты', 'price': 30.99},
+            {'name': 'карамель', 'price': 41.99},
+            {'name': 'пирожное', 'price': 62.99}
+        ],
+}
+
+sweets = {
+    'печенье': [
+        {'shop': 'ашан', 'price': 10.99},
+        {'shop': 'пятерочка', 'price': 9.99},
+    ],
+    'конфеты': [
+        {'shop': 'пятерочка', 'price': 32.99},
+        {'shop': 'магнит', 'price': 30.99},
+    ],
+    'карамель': [
+        {'shop': 'ашан', 'price': 45.99},
+        {'shop': 'магнит', 'price': 41.99},
+    ],
+    'пирожное': [
+        {'shop': 'пятерочка', 'price': 59.99},
+        {'shop': 'магнит', 'price': 62.99},
+    ],
+}
+print(sweets)
+```
+## 3. Вывод
+![img_9.png](img_9.png)
+
+---
+
+## Задание 11 - store.py
+## 1. Описание проделанной работы:
+Есть словарь кодов товаров
+```
+goods = {
+    'Лампа': '12345',
+    'Стол': '23456',
+    'Диван': '34567',
+    'Стул': '45678',
+}
+```
+Есть словарь списков количества товаров на складе.
+```
+store = {
+    '12345': [
+        {'quantity': 27, 'price': 42},
+    ],
+    '23456': [
+        {'quantity': 22, 'price': 510},
+        {'quantity': 32, 'price': 520},
+    ],
+    '34567': [
+        {'quantity': 2, 'price': 1200},
+        {'quantity': 1, 'price': 1150},
+    ],
+    '45678': [
+        {'quantity': 50, 'price': 100},
+        {'quantity': 12, 'price': 95},
+        {'quantity': 43, 'price': 97},
+    ],
+}
+```
+Нужно рассчитать на какую сумму лежит каждого товара на складе
+
+Вывести стоимость каждого вида товара на складе и сколько штук
+## 2. Программа
+```питон
+goods = {
+    'Лампа': '12345',
+    'Стол': '23456',
+    'Диван': '34567',
+    'Стул': '45678',
+}
+
+store = {
+    '12345': [
+        {'quantity': 27, 'price': 42},
+    ],
+    '23456': [
+        {'quantity': 22, 'price': 510},
+        {'quantity': 32, 'price': 520},
+    ],
+    '34567': [
+        {'quantity': 2, 'price': 1200},
+        {'quantity': 1, 'price': 1150},
+    ],
+    '45678': [
+        {'quantity': 50, 'price': 100},
+        {'quantity': 12, 'price': 95},
+        {'quantity': 43, 'price': 97},
+    ],
+}
+
+lamp_code = goods['Лампа']
+
+lamps_item = store[lamp_code][0]
+lamps_quantity = lamps_item['quantity']
+lamps_price = lamps_item['price']
+lamps_cost = lamps_quantity * lamps_price
+print('Лампа -', lamps_quantity, 'шт, стоимость', lamps_cost, 'руб')
+
+table_code = goods['Стол']
+
+table1_quantity = store[table_code][0]['quantity']
+table1_price = store[table_code][0]['price']
+table1_cost = table1_quantity * table1_price
+
+table2_quantity = store[table_code][1]['quantity']
+table2_price = store[table_code][1]['price']
+table2_cost = table2_quantity * table2_price
+
+table_total_quantity = table1_quantity + table2_quantity
+table_total_cost = table1_cost + table2_cost
+print(f'Стол - {table_total_quantity} шт, стоимость {table_total_cost} руб')
+
+divan_code = goods['Диван']
+
+divan1_quantity = store[divan_code][0]['quantity']
+divan1_price = store[divan_code][0]['price']
+divan1_cost = divan1_quantity * divan1_price
+
+divan2_quantity = store[divan_code][1]['quantity']
+divan2_price = store[divan_code][1]['price']
+divan2_cost = divan2_quantity * divan2_price
+
+divan_total_quantity = divan1_quantity + divan2_quantity
+divan_total_cost = divan1_cost + divan2_cost
+print(f'Диван - {divan_total_quantity} шт, стоимость {divan_total_cost} руб')
+
+stul_code = goods['Стул']
+
+stul1_quantity = store[stul_code][0]['quantity']
+stul1_price = store[stul_code][0]['price']
+stul1_cost = stul1_quantity * stul1_price
+
+stul2_quantity = store[stul_code][1]['quantity']
+stul2_price = store[stul_code][1]['price']
+stul2_cost = stul2_quantity * stul2_price
+
+stul3_quantity = store[stul_code][2]['quantity']
+stul3_price = store[stul_code][2]['price']
+stul3_cost = stul3_quantity * stul3_price
+
+stul_total_quantity = stul1_quantity + stul2_quantity + stul3_quantity
+stul_total_cost = stul1_cost + stul2_cost + stul3_cost
+print(f'Стул - {stul_total_quantity} шт, стоимость {stul_total_cost} руб')
+```
+## 3. Вывод
+![img_10.png](img_10.png)
+
+---
