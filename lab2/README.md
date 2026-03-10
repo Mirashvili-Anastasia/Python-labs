@@ -3,13 +3,7 @@
 1. Импортировала библиотеки matplotlib и numpy
 2. изучила уроки по построению графика
 3. создала график:
-$$
-f(x) = 
-\begin{cases} 
-8x^3 \cos x, & 0 \leq x \leq 1; \\
-\ln(1 + \sqrt{x}) - \cos x, & 1 < x \leq 2.
-\end{cases}
-$$
+$$f(x) = \begin{cases} 8x^3 \cos x, & 0 \leq x \leq 1; \\ \ln(1 + \sqrt{x}) - \cos x, & 1 < x \leq 2. \end{cases}$$
 ## 2. Программа
 ```python
 import matplotlib.pyplot as plt
