@@ -26,6 +26,6 @@ plt.plot(x,y1, x,y2)
 plt.show()
 ```
 ## 3. Вывод
-![Figure_1.png](../../../Desktop/Figure_1.png)
+![img.png](img.png)
 ## Использованные источники:
 [Devpractice Team. Библиотека Matplotlib](https://evil-teacher.orbiter.website/books/prog_pm/matplotlib.pdf)
