@@ -1,54 +1,28 @@
 def cache_decorator(func):
-    """
-    Простой декоратор, который запоминает результаты функции.
-
-    func - это наша исходная функция (например, slow_function)
-    """
-
-    # Создаем словарь для хранения результатов
-    # Этот словарь будет жить, пока существует функция
     memory = {}
 
     def wrapper(*args, **kwargs):
-        """
-        Эта функция ЗАМЕНЯЕТ исходную функцию.
-        *args - все позиционные аргументы (1, 2, 3...)
-        **kwargs - все именованные аргументы (x=1, y=2...)
-        """
-
-        # Превращаем аргументы в ключ для словаря
-        # Словарь: ключ -> результат
-        key = (args, tuple(sorted(kwargs.items())))  # Кортеж - неизменяемый тип
-
-        # Если такой ключ уже есть в памяти
+        key = (args, tuple(sorted(kwargs.items())))  
         if key in memory:
-            print(f"⚡ Беру из кэша для {key}")
-            return memory[key]  # Возвращаем сохраненный результат
-
-        # Если нет - вызываем оригинальную функцию
-        print(f"🐢 Вычисляю впервые для {key}")
-        result = func(*args, **kwargs)  # Вызываем исходную функцию
-
-        # Сохраняем результат в кэш
+            print(f"Беру из кэша для {key}")
+            return memory[key]  
+        print(f"Вычисляю впервые для {key}")
+        result = func(*args, **kwargs)  
         memory[key] = result
 
         return result
 
-    # Возвращаем обертку, которая заменит исходную функцию
     return wrapper
 
 
-# Используем декоратор
 @cache_decorator
 def slow_multiply(x, y):
-    """Медленное умножение (как будто)"""
     import time
-    time.sleep(2)  # Имитация тяжелой работы
+    time.sleep(2)  
     return x * y
 
 
-# Проверяем работу
-print(slow_multiply(3, 4))  # 1-й раз: вычисляем, ждем 2 сек
-print(slow_multiply(3, 4))  # 2-й раз: берем из кэша, мгновенно!
-print(slow_multiply(5, 2))  # Новые аргументы - вычисляем
-print(slow_multiply(3, 4))  # Снова берем из кэша!
+print(slow_multiply(3, 4))
+print(slow_multiply(3, 4))
+print(slow_multiply(5, 2))
+print(slow_multiply(3, 4))
