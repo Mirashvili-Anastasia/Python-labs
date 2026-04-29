@@ -12,7 +12,7 @@ from rich.console import Console
 from rich.panel import Panel
 
 # Импорты из вашего пакета
-from lab_package import (
+from package import (
     intersect,
     root,
     intersect_recursive,
