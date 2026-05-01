@@ -2,9 +2,9 @@
 
 # Импорты из lab4
 from .lab4.nomber1 import intersect
-from .lab4.nomber2 import root
-from .lab4.nomber11 import intersect_recursive
-from .lab4.nomber21 import root_iterative
+from .lab4.number2 import root
+from .lab4.number11 import intersect_recursive
+from .lab4.number21 import root_iterative
 # Импорты из lab5
 from .lab5.fibonacci import fibonacci_closure
 from .lab5.decorator import cache_decorator
