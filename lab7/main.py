@@ -1,432 +1,300 @@
+#!/usr/bin/env python3
 """
-Запускающий модуль для лабораторных работ №4-6 (Вариант 6)
-CLI интерфейс на Typer
+CLI интерфейс для лабораторных работ №4-6
+Использует Typer для создания командной строки
 """
 
 import typer
+from typing import Optional, List
 from rich import print as rprint
 from rich.table import Table
-from rich.panel import Panel
 from rich.console import Console
-from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.panel import Panel
 
+# Импорты из вашего пакета
 from package import (
-intersect,root,intersect_recursive,root_iterative,fibonacci_closure,cache_decorator,PasswordGenerator
+    intersect,
+    root,
+    intersect_recursive,
+    root_iterative,
+    fibonacci_closure,
+    cache_decorator,
+    PasswordGenerator
 )
 
-app = typer.Typer(help="Лабораторные работы №4-6 - Вариант 6", add_completion=False)
+app = typer.Typer(help="CLI для запуска лабораторных работ №4-6", add_completion=False)
 console = Console()
 
+# Создаем экземпляр генератора паролей
+pg = PasswordGenerator()
 
-# ==================== ЛАБОРАТОРНАЯ №4 ====================
 
 @app.command()
-def lab4():
-    """Лабораторная №4: рекурсивные и итеративные алгоритмы"""
-    rprint(Panel.fit("[bold cyan]Лабораторная работа №4 - Вариант 6[/bold cyan]", border_style="cyan"))
+def intersect_cmd(
+        list1: str = typer.Option(..., "--list1", "-l1", help="Первый список (через запятую)"),
+        list2: str = typer.Option(..., "--list2", "-l2", help="Второй список (через запятую)"),
+        recursive: bool = typer.Option(False, "--recursive", "-r", help="Использовать рекурсивную версию")
+):
+    """
+    Находит пересечение двух списков
+    """
+    # Преобразуем строки в списки
+    l1 = [int(x.strip()) for x in list1.split(',')]
+    l2 = [int(x.strip()) for x in list2.split(',')]
 
-    rprint("\n[yellow]Выберите программу:[/yellow]")
-    rprint("  [green]1.[/green] Распаковка списка (рекурсивно)")
-    rprint("  [green]2.[/green] Распаковка списка (итеративно)")
-    rprint("  [green]3.[/green] Последовательность w_i (рекурсивно)")
-    rprint("  [green]4.[/green] Последовательность w_i (итеративно)")
+    console.print(f"[cyan]Первый список:[/cyan] {l1}")
+    console.print(f"[cyan]Второй список:[/cyan] {l2}")
 
-    choice = typer.prompt("\nВаш выбор", default="1")
-
-    if choice == "1":
-        # Распаковка рекурсивно
-        data_str = typer.prompt(
-            "Введите данные для распаковки",
-            default="[None, [1, ({2, 3}, {'foo': 'bar'})]]"
-        )
-        try:
-            data = eval(data_str)
-            with Progress(
-                    SpinnerColumn(),
-                    TextColumn("[progress.description]{task.description}"),
-                    console=console,
-                    transient=True
-            ) as progress:
-                progress.add_task(description="Распаковка...", total=None)
-                result = unpack_recursive(data)
-            rprint(f"\n[green]Результат распаковки:[/green] {result}")
-            rprint(f"[dim]Количество элементов: {len(result)}[/dim]")
-        except Exception as e:
-            rprint(f"[red]Ошибка: {e}[/red]")
-
-    elif choice == "2":
-        # Распаковка итеративно
-        data_str = typer.prompt(
-            "Введите данные для распаковки",
-            default="[None, [1, ({2, 3}, {'foo': 'bar'})]]"
-        )
-        try:
-            data = eval(data_str)
-            result = unpack_iterative(data)
-            rprint(f"\n[green]Результат распаковки:[/green] {result}")
-            rprint(f"[dim]Количество элементов: {len(result)}[/dim]")
-        except Exception as e:
-            rprint(f"[red]Ошибка: {e}[/red]")
-
-    elif choice == "3":
-        # Последовательность рекурсивно
-        try:
-            i = typer.prompt("Введите номер члена последовательности (i)", type=int)
-            if i <= 0:
-                rprint("[red]Ошибка: номер должен быть положительным![/red]")
-                return
-
-            with Progress(
-                    SpinnerColumn(),
-                    TextColumn("[progress.description]{task.description}"),
-                    console=console,
-                    transient=True
-            ) as progress:
-                progress.add_task(description=f"Вычисление w_{i}...", total=None)
-                result = sequence_recursive(i)
-
-            rprint(f"\n[green]w_{i} = {result}[/green]")
-
-            # Вывод дополнительной информации
-            if i <= 10:
-                rprint("[dim]Примечание: вычислено рекурсивно[/dim]")
-            else:
-                rprint("[yellow]Внимание: при больших i рекурсия может быть медленной[/yellow]")
-
-        except ValueError:
-            rprint("[red]Ошибка: введите целое число![/red]")
-        except RecursionError:
-            rprint("[red]Ошибка: слишком глубокий уровень рекурсии! Попробуйте меньшее число (≤ 20)[/red]")
-
-    elif choice == "4":
-        # Последовательность итеративно
-        try:
-            i = typer.prompt("Введите номер члена последовательности (i)", type=int)
-            if i <= 0:
-                rprint("[red]Ошибка: номер должен быть положительным![/red]")
-                return
-
-            result = sequence_iterative(i)
-            rprint(f"\n[green]w_{i} = {result}[/green]")
-
-            # Вывод таблицы для наглядности
-            if i <= 10:
-                rprint("\n[dim]Первые члены последовательности:[/dim]")
-                table = Table(show_header=True, header_style="bold cyan")
-                table.add_column("i", style="yellow", justify="center")
-                table.add_column("w_i", style="green")
-                for j in range(1, i + 1):
-                    table.add_row(str(j), f"{sequence_iterative(j):.10f}")
-                rprint(table)
-
-        except ValueError:
-            rprint("[red]Ошибка: введите целое число![/red]")
-
+    if recursive:
+        result = intersect_recursive(l1, l2)
+        console.print(f"[green]Результат (рекурсивно):[/green] {result}")
     else:
-        rprint("[red]Ошибка: неверный выбор! Введите 1, 2, 3 или 4[/red]")
+        result = intersect(l1, l2)
+        console.print(f"[green]Результат:[/green] {result}")
 
-
-# ==================== ЛАБОРАТОРНАЯ №5 ====================
 
 @app.command()
-def lab5():
-    """Лабораторная №5: замыкания и декораторы"""
-    rprint(Panel.fit("[bold magenta]Лабораторная работа №5 - Вариант 6[/bold magenta]", border_style="magenta"))
+def root_cmd(
+        n: int = typer.Option(..., "--n", "-n", help="Количество корней"),
+        iterative: bool = typer.Option(False, "--iterative", "-i", help="Использовать итеративную версию")
+):
+    """
+    Вычисляет вложенные корни: sqrt(3 + sqrt(3 + sqrt(3 + ...)))
+    """
+    if n < 1:
+        console.print("[red]Ошибка: n должно быть >= 1[/red]")
+        raise typer.Exit(1)
 
-    rprint("\n[yellow]Выберите программу:[/yellow]")
-    rprint("  [green]1.[/green] Замыкание для чтения файла")
-    rprint("  [green]2.[/green] Декоратор с логированием")
-
-    choice = typer.prompt("\nВаш выбор", default="1")
-
-    if choice == "1":
-        # Замыкание для чтения файла
-        filename = typer.prompt("Введите имя файла", default="test.txt")
-
-        try:
-            reader = get_file_reader(filename)
-            rprint(f"\n[green]Содержимое файла '{filename}':[/green]")
-
-            line_num = 1
-            lines = []
-            while True:
-                line = reader()
-                if line is None:
-                    break
-                lines.append((line_num, line.rstrip('\n')))
-                line_num += 1
-
-            if not lines:
-                rprint("[dim]  (файл пуст)[/dim]")
-            else:
-                table = Table(show_header=True, header_style="bold green")
-                table.add_column("№", style="cyan", justify="center")
-                table.add_column("Строка", style="white")
-                for num, line in lines:
-                    table.add_row(str(num), line[:80] + "..." if len(line) > 80 else line)
-                rprint(table)
-
-            rprint(f"[dim]Всего строк: {line_num - 1}[/dim]")
-
-        except FileNotFoundError:
-            rprint(f"[red]Ошибка: файл '{filename}' не найден![/red]")
-            rprint("[dim]Создайте файл или укажите правильное имя[/dim]")
-        except Exception as e:
-            rprint(f"[red]Ошибка: {e}[/red]")
-
-    elif choice == "2":
-        # Декоратор с логированием
-        rprint("\n[green]Демонстрация работы декоратора логирования:[/green]")
-
-        @log_c
-        def multiply(a: float, b: float) -> float:
-            """Умножает два числа"""
-            return a * b
-
-        @log_c
-        def power(base: float, exp: int) -> float:
-            """Возводит число в степень"""
-            return base ** exp
-
-        @log_c
-        def divide(a: float, b: float) -> float:
-            """Делит одно число на другое"""
-            if b == 0:
-                raise ValueError("Деление на ноль!")
-            return a / b
-
-        rprint("\n[bold]--- Пример 1: multiply(5, 6) ---[/bold]")
-        result1 = multiply(5, 6)
-        rprint(f"[dim]Результат: {result1}[/dim]\n")
-
-        rprint("[bold]--- Пример 2: power(2, 10) ---[/bold]")
-        result2 = power(2, 10)
-        rprint(f"[dim]Результат: {result2}[/dim]\n")
-
-        rprint("[bold]--- Пример 3: divide(10, 2) ---[/bold]")
-        result3 = divide(10, 2)
-        rprint(f"[dim]Результат: {result3}[/dim]\n")
-
-        rprint("[bold]--- Пример 4: multiply(5, 6) [повторно, должен быть в логах] ---[/bold]")
-        result4 = multiply(5, 6)
-        rprint(f"[dim]Результат: {result4}[/dim]\n")
-
-        rprint("[bold]--- Пример 5: divide(10, 0) [ошибка] ---[/bold]")
-        try:
-            result5 = divide(10, 0)
-        except ValueError as e:
-            rprint(f"[red]Поймана ошибка: {e}[/red]")
-
+    if iterative:
+        result = root_iterative(n)
+        console.print(f"[green]x_{n} = {result} (итеративно)[/green]")
     else:
-        rprint("[red]Ошибка: неверный выбор! Введите 1 или 2[/red]")
+        result = root(n)
+        console.print(f"[green]x_{n} = {result} (рекурсивно)[/green]")
 
-
-# ==================== ЛАБОРАТОРНАЯ №6 ====================
 
 @app.command()
-def lab6():
-    """Лабораторная №6: генератор простых чисел (решето Эратосфена)"""
-    rprint(Panel.fit("[bold green]Лабораторная работа №6 - Вариант 6[/bold green]", border_style="green"))
+def fibonacci_cmd(
+        count: int = typer.Option(10, "--count", "-c", help="Количество чисел Фибоначчи")
+):
+    """
+    Генерирует числа Фибоначчи с помощью замыкания
+    """
+    if count < 1:
+        console.print("[red]Ошибка: count должно быть >= 1[/red]")
+        raise typer.Exit(1)
 
-    rprint("\n[cyan]Программа: Генератор простых чисел[/cyan]")
-    rprint("[dim]Используется алгоритм «Решето Эратосфена»[/dim]\n")
+    fib = fibonacci_closure()
+    numbers = [fib() for _ in range(count)]
 
-    try:
-        start = typer.prompt("Введите нижнюю границу", type=int)
-        end = typer.prompt("Введите верхнюю границу", type=int)
+    table = Table(title=f"Первые {count} чисел Фибоначчи")
+    table.add_column("Индекс", style="cyan")
+    table.add_column("Значение", style="green")
 
-        if start < 2:
-            rprint("[yellow]Внимание: простые числа начинаются с 2. Устанавливаю start = 2[/yellow]")
-            start = 2
+    for i, num in enumerate(numbers):
+        table.add_row(str(i), str(num))
 
-        if start > end:
-            rprint(f"[red]Ошибка: нижняя граница ({start}) больше верхней ({end})[/red]")
-            return
+    console.print(table)
 
-        with Progress(
-                SpinnerColumn(),
-                TextColumn("[progress.description]{task.description}"),
-                console=console,
-                transient=True
-        ) as progress:
-            progress.add_task(description="Поиск простых чисел...", total=None)
-            primes = generate_primes(start, end)
-
-        if not primes:
-            rprint(f"\n[yellow]Простых чисел в диапазоне [{start}, {end}] не найдено[/yellow]")
-        else:
-            # Вывод результатов в таблице
-            rprint(f"\n[green]Простые числа в диапазоне [{start}, {end}]:[/green]")
-
-            # Разбиваем на колонки для красивого вывода
-            per_row = 10
-            table = Table(show_header=False, show_lines=False)
-            for _ in range(per_row):
-                table.add_column(style="green", justify="center")
-
-            rows = []
-            for i in range(0, len(primes), per_row):
-                rows.append(primes[i:i + per_row])
-
-            for row in rows:
-                table.add_row(*[str(x) for x in row])
-
-            rprint(table)
-            rprint(f"\n[bold]Всего найдено: {len(primes)} простых чисел[/bold]")
-
-            # Дополнительная статистика
-            if primes:
-                rprint(f"[dim]Минимальное: {primes[0]}, Максимальное: {primes[-1]}[/dim]")
-
-    except ValueError:
-        rprint("[red]Ошибка: введите целые числа![/red]")
-
-
-# ==================== ИНТЕРАКТИВНОЕ МЕНЮ ====================
 
 @app.command()
-def menu():
-    """Интерактивное меню для выбора лабораторной работы"""
-    console.clear()
+def cache_demo_cmd(
+        x: int = typer.Option(3, "--x", help="Первый множитель"),
+        y: int = typer.Option(4, "--y", help="Второй множитель")
+):
+    """
+    Демонстрирует работу декоратора кэширования
+    """
 
-    # Красивый заголовок
-    title = Panel.fit(
-        "[bold cyan]Лабораторные работы №4-6[/bold cyan]\n[dim]Вариант 6[/dim]",
-        border_style="cyan"
+    @cache_decorator
+    def slow_multiply(a: int, b: int) -> int:
+        import time
+        time.sleep(2)
+        return a * b
+
+    console.print(f"[yellow]Вычисление {x} * {y} (первый раз - будет задержка 2 сек)[/yellow]")
+    result1 = slow_multiply(x, y)
+    console.print(f"[green]Результат: {result1}[/green]")
+
+    console.print(f"[yellow]Повторное вычисление {x} * {y} (должно взяться из кэша)[/yellow]")
+    result2 = slow_multiply(x, y)
+    console.print(f"[green]Результат: {result2}[/green]")
+
+
+@app.command()
+def password_cmd(
+        length: int = typer.Option(12, "--length", "-l", help="Длина пароля"),
+        no_upper: bool = typer.Option(False, "--no-upper", help="Не использовать заглавные буквы"),
+        no_lower: bool = typer.Option(False, "--no-lower", help="Не использовать строчные буквы"),
+        no_digits: bool = typer.Option(False, "--no-digits", help="Не использовать цифры"),
+        no_special: bool = typer.Option(False, "--no-special", help="Не использовать спецсимволы"),
+        exclude_ambiguous: bool = typer.Option(False, "--exclude-ambiguous", "-e",
+                                               help="Исключить неоднозначные символы"),
+        count: int = typer.Option(1, "--count", "-c", help="Количество паролей")
+):
+    """
+    Генерирует пароли с заданными параметрами
+    """
+    if count < 1:
+        console.print("[red]Ошибка: count должно быть >= 1[/red]")
+        raise typer.Exit(1)
+
+    use_upper = not no_upper
+    use_lower = not no_lower
+    use_digits = not no_digits
+    use_special = not no_special
+
+    # Проверка, что выбран хотя бы один тип символов
+    if not any([use_upper, use_lower, use_digits, use_special]):
+        console.print("[red]Ошибка: должен быть выбран хотя бы один тип символов[/red]")
+        raise typer.Exit(1)
+
+    passwords = pg.generate_multiple(
+        count=count,
+        length=length,
+        use_upper=use_upper,
+        use_lower=use_lower,
+        use_digits=use_digits,
+        use_special=use_special,
+        exclude_ambiguous=exclude_ambiguous
     )
-    rprint(title)
 
-    # Таблица с описанием
-    table = Table(title="[bold yellow]Доступные лабораторные работы[/bold yellow]",
-                  title_style="bold yellow",
-                  show_header=True,
-                  header_style="bold white")
+    table = Table(title=f"Сгенерированные пароли (длина: {length})")
+    table.add_column("№", style="cyan")
+    table.add_column("Пароль", style="green")
 
-    table.add_column("№", style="cyan", justify="center", width=6)
-    table.add_column("Название", style="magenta", width=25)
-    table.add_column("Описание", style="green", width=40)
-    table.add_column("Кол-во программ", style="yellow", justify="center", width=15)
+    for i, pwd in enumerate(passwords, 1):
+        table.add_row(str(i), pwd)
 
-    table.add_row("4", "Рекурсия и итерация",
-                  "Распаковка списков, последовательность w_i", "4")
-    table.add_row("5", "Замыкания и декораторы",
-                  "Чтение файлов, логирование вызовов", "2")
-    table.add_row("6", "Решето Эратосфена",
-                  "Генератор простых чисел", "1")
+    console.print(table)
 
-    rprint(table)
+    # Вывод информации о настройках
+    settings = []
+    if use_upper: settings.append("заглавные")
+    if use_lower: settings.append("строчные")
+    if use_digits: settings.append("цифры")
+    if use_special: settings.append("спецсимволы")
+    if exclude_ambiguous: settings.append("исключены неоднозначные")
 
-    choice = typer.prompt("\n[bold]Введите номер лабораторной работы[/bold] (4-6) или [red]q[/red] для выхода",
-                          default="q")
+    console.print(f"[dim]Использованы: {', '.join(settings)}[/dim]")
 
-    if choice == "4":
-        lab4()
-    elif choice == "5":
-        lab5()
-    elif choice == "6":
-        lab6()
-    elif choice.lower() == "q":
-        rprint("[green]До свидания! 👋[/green]")
-        raise typer.Exit()
+
+@app.command()
+def interactive():
+    """
+    Интерактивный режим с меню
+    """
+    console.print(Panel.fit("[bold cyan]Лабораторные работы №4-6[/bold cyan]", border_style="cyan"))
+
+    while True:
+        console.print("\n[bold yellow]Выберите лабораторную работу:[/bold yellow]")
+        console.print("1. Пересечение списков (Lab4)")
+        console.print("2. Вложенные корни (Lab4)")
+        console.print("3. Числа Фибоначчи (Lab5)")
+        console.print("4. Декоратор кэширования (Lab5)")
+        console.print("5. Генератор паролей (Lab6)")
+        console.print("0. Выход")
+
+        choice = typer.prompt("Ваш выбор", default="0")
+
+        if choice == "0":
+            console.print("[green]До свидания![/green]")
+            break
+        elif choice == "1":
+            list1 = typer.prompt("Введите первый список (через запятую)", default="1,2,3,4")
+            list2 = typer.prompt("Введите второй список (через запятую)", default="2,3,4,6,8")
+            recursive = typer.confirm("Использовать рекурсивную версию?", default=False)
+
+            l1 = [int(x.strip()) for x in list1.split(',')]
+            l2 = [int(x.strip()) for x in list2.split(',')]
+
+            if recursive:
+                result = intersect_recursive(l1, l2)
+                console.print(f"[green]Результат (рекурсивно): {result}[/green]")
+            else:
+                result = intersect(l1, l2)
+                console.print(f"[green]Результат: {result}[/green]")
+
+        elif choice == "2":
+            n = typer.prompt("Введите количество корней n", type=int, default=3)
+            iterative = typer.confirm("Использовать итеративную версию?", default=False)
+
+            if iterative:
+                result = root_iterative(n)
+                console.print(f"[green]x_{n} = {result} (итеративно)[/green]")
+            else:
+                result = root(n)
+                console.print(f"[green]x_{n} = {result} (рекурсивно)[/green]")
+
+        elif choice == "3":
+            count = typer.prompt("Количество чисел Фибоначчи", type=int, default=10)
+            fib = fibonacci_closure()
+            numbers = [fib() for _ in range(count)]
+            console.print(f"[green]Числа Фибоначчи: {numbers}[/green]")
+
+        elif choice == "4":
+            x = typer.prompt("Введите x", type=int, default=3)
+            y = typer.prompt("Введите y", type=int, default=4)
+
+            @cache_decorator
+            def slow_multiply(a: int, b: int) -> int:
+                import time
+                time.sleep(2)
+                return a * b
+
+            console.print("[yellow]Первый вызов (задержка 2 сек)...[/yellow]")
+            result1 = slow_multiply(x, y)
+            console.print(f"[green]Результат: {result1}[/green]")
+
+            console.print("[yellow]Второй вызов (из кэша)...[/yellow]")
+            result2 = slow_multiply(x, y)
+            console.print(f"[green]Результат: {result2}[/green]")
+
+        elif choice == "5":
+            length = typer.prompt("Длина пароля", type=int, default=12)
+            use_upper = typer.confirm("Использовать заглавные буквы?", default=True)
+            use_lower = typer.confirm("Использовать строчные буквы?", default=True)
+            use_digits = typer.confirm("Использовать цифры?", default=True)
+            use_special = typer.confirm("Использовать спецсимволы?", default=True)
+            exclude_ambiguous = typer.confirm("Исключить неоднозначные символы?", default=False)
+            count = typer.prompt("Количество паролей", type=int, default=1)
+
+            passwords = pg.generate_multiple(
+                count=count,
+                length=length,
+                use_upper=use_upper,
+                use_lower=use_lower,
+                use_digits=use_digits,
+                use_special=use_special,
+                exclude_ambiguous=exclude_ambiguous
+            )
+
+            for i, pwd in enumerate(passwords, 1):
+                console.print(f"[green]{i}. {pwd}[/green]")
+
+
+@app.callback()
+def callback():
+    """
+    CLI для управления лабораторными работами
+    """
+    pass
+
+
+def main():
+    if len(sys.argv) == 1:
+        console.print(Panel.fit(
+            "[bold cyan]Лабораторные работы №4-6[/bold cyan]\n\n"
+            "Используйте --help для просмотра команд\n"
+            "Или запустите interactive для интерактивного режима",
+            border_style="cyan"
+        ))
+        app.print_help()
     else:
-        rprint("[red]Ошибка: введите 4, 5, 6 или q[/red]")
-        menu()
-
-
-# ==================== ОТДЕЛЬНЫЕ КОМАНДЫ ДЛЯ УДОБСТВА ====================
-
-@app.command()
-def unpack(data: str = typer.Argument(..., help="Данные для распаковки"),
-           recursive: bool = typer.Option(True, "--recursive", "-r", help="Использовать рекурсивную версию")):
-    """
-    Быстрая команда для распаковки списка
-    """
-    try:
-        parsed_data = eval(data)
-        if recursive:
-            result = unpack_recursive(parsed_data)
-        else:
-            result = unpack_iterative(parsed_data)
-        rprint(f"[green]Результат:[/green] {result}")
-        rprint(f"[dim]Количество элементов: {len(result)}[/dim]")
-    except Exception as e:
-        rprint(f"[red]Ошибка: {e}[/red]")
-
-
-@app.command()
-def sequence(i: int = typer.Argument(..., help="Номер члена последовательности"),
-             iterative: bool = typer.Option(False, "--iterative", "-i", help="Использовать итеративную версию")):
-    """
-    Быстрая команда для вычисления последовательности w_i
-    """
-    try:
-        if i <= 0:
-            rprint("[red]Ошибка: i должно быть положительным[/red]")
-            return
-
-        if iterative:
-            result = sequence_iterative(i)
-            rprint(f"[green]w_{i} = {result} (итеративно)[/green]")
-        else:
-            result = sequence_recursive(i)
-            rprint(f"[green]w_{i} = {result} (рекурсивно)[/green]")
-    except RecursionError:
-        rprint("[red]Ошибка: слишком глубокая рекурсия (i ≤ 20 для рекурсивной версии)[/red]")
-
-
-@app.command()
-def file_reader(filename: str = typer.Argument(..., help="Имя файла для чтения")):
-    """
-    Быстрая команда для чтения файла через замыкание
-    """
-    try:
-        reader = get_file_reader(filename)
-        rprint(f"[green]Файл '{filename}':[/green]")
-        line_num = 1
-        while True:
-            line = reader()
-            if line is None:
-                break
-            rprint(f"  {line_num}. {line.rstrip()}")
-            line_num += 1
-        if line_num == 1:
-            rprint("  (файл пуст)")
-        else:
-            rprint(f"[dim]Всего строк: {line_num - 1}[/dim]")
-    except FileNotFoundError:
-        rprint(f"[red]Ошибка: файл '{filename}' не найден[/red]")
-
-
-@app.command()
-def primes(start: int = typer.Argument(..., help="Нижняя граница"),
-           end: int = typer.Argument(..., help="Верхняя граница")):
-    """
-    Быстрая команда для поиска простых чисел
-    """
-    try:
-        if start < 2:
-            start = 2
-        primes_list = generate_primes(start, end)
-        if primes_list:
-            rprint(f"[green]Простые числа в [{start}, {end}]:[/green]")
-            rprint(f"{primes_list}")
-            rprint(f"[dim]Всего: {len(primes_list)}[/dim]")
-        else:
-            rprint(f"[yellow]Простых чисел в диапазоне [{start}, {end}] не найдено[/yellow]")
-    except Exception as e:
-        rprint(f"[red]Ошибка: {e}[/red]")
-
-
-# ==================== ТОЧКА ВХОДА ====================
-
-@app.callback(invoke_without_command=True)
-def main(ctx: typer.Context):
-    """
-    CLI для лабораторных работ №4-6 (Вариант 6)
-    """
-    if ctx.invoked_subcommand is None:
-        menu()
+        app()
 
 
 if __name__ == "__main__":
-    app()
+    import sys
+
+    main()
