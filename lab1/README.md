@@ -50,7 +50,7 @@ distances['Paris'] = {
 print(distances)
 ```
 ## 3. Вывод
-![img.png](img.png)
+![img.png](Lab1_Rare/img.png)
 
 ---
 
@@ -98,7 +98,7 @@ else:
     print(False)
 ```
 ## 3. Вывод
-![img_1.png](img_1.png)
+![img_1.png](Lab1_Rare/img_1.png)
 
 ---
 
@@ -112,7 +112,7 @@ My_result = (1 * 2 + 3) * 4 + 5
 print(My_result)
 ```
 ## 3. Вывод
-![img_2.png](img_2.png)
+![img_2.png](Lab1_Rare/img_2.png)
 
 ---
 
@@ -133,7 +133,7 @@ my_favorite_movies = 'Терминатор, Пятый элемент, Ават�
 print(my_favorite_movies[:10], my_favorite_movies[42:63], my_favorite_movies[12:25], my_favorite_movies[35:40])
 ```
 ## 3. Вывод
-![img_3.png](img_3.png)
+![img_3.png](Lab1_Rare/img_3.png)
 
 ---
 
@@ -164,7 +164,7 @@ for person in my_family_height:
 print(f"Общий рост моей семьи - {total_height} см")
 ```
 ## 3. Вывод
-![img_4.png](img_4.png)
+![img_4.png](Lab1_Rare/img_4.png)
 
 ---
 
@@ -201,7 +201,7 @@ print(f'Лев в: {lion_index + 1}')
 print(f'Жаворонок в: {lark_index + 1}')
 ```
 ## 3. Вывод
-![img_5.png](img_5.png)
+![img_5.png](Lab1_Rare/img_5.png)
 
 ---
 
@@ -286,7 +286,7 @@ total_time_rounded_2 = round(total_time_2, 2)
 print(f"А другие три песни звучат {total_time_rounded_2} минут")
 ```
 ## 3. Вывод
-![img_6.png](img_6.png)
+![img_6.png](Lab1_Rare/img_6.png)
 
 ---
 
@@ -330,7 +330,7 @@ secret_message = f'{first_word} {second_word} {third_word} {fourth_word} {fifth_
 print(secret_message)
 ```
 ## 3. Вывод
-![img_7.png](img_7.png)
+![img_7.png](Lab1_Rare/img_7.png)
 
 ---
 
@@ -367,7 +367,7 @@ flower_set = meadow_set - garden_set
 print(flower_set)
 ```
 ## 3. Вывод
-![img_8.png](img_8.png)
+![img_8.png](Lab1_Rare/img_8.png)
 
 ---
 
@@ -447,7 +447,7 @@ sweets = {
 print(sweets)
 ```
 ## 3. Вывод
-![img_9.png](img_9.png)
+![img_9.png](Lab1_Rare/img_9.png)
 
 ---
 
@@ -569,6 +569,6 @@ stul_total_cost = stul1_cost + stul2_cost + stul3_cost
 print(f'Стул - {stul_total_quantity} шт, стоимость {stul_total_cost} руб')
 ```
 ## 3. Вывод
-![img_10.png](img_10.png)
+![img_10.png](Lab1_Rare/img_10.png)
 
 ---
