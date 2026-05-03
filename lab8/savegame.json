@@ -1,0 +1,19 @@
+{
+    "player_name": "",
+    "age": 40,
+    "energy": 100,
+    "happiness": 100,
+    "skills": {
+        "Программирование": 34,
+        "Коммуникации": 62,
+        "Управление": 20,
+        "Креативность": 35
+    },
+    "money": 11501,
+    "career_level": 1,
+    "job_title": "Стажер",
+    "salary": 30000,
+    "experience": 49,
+    "inventory": [],
+    "achievements": []
+}
